@@ -33,4 +33,4 @@ models:
   challenge_02:
     # Config indicated by + and applies to all files under models/example/
     library_loans:
-      +materialized: view
+      +materialized: table
