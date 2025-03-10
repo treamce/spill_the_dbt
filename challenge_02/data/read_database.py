@@ -1,7 +1,7 @@
 import duckdb
 
 # Connection to the database file called 'library.db'
-con = duckdb.connect("ch02_data/library.db")
+con = duckdb.connect("data/library.db")
 
 show_tables = """
     SELECT * FROM pg_catalog.pg_tables;
@@ -11,7 +11,7 @@ show_tables = """
 con.sql(show_tables).show()
 
 # Load the sql_query and run it
-fd = open('ch02_data/customers_with_late_fees.sql', 'r')
+fd = open('data/customers_with_late_fees.sql', 'r')
 sql_query = fd.read()
 fd.close()
 

@@ -5,10 +5,61 @@ sources:
     schema: main
     tables: 
       - name: books_factual
-        columns: 
-          - name: book_id
-            data_tests: 
-              - unique
-              - not_null
-          - name: books_fictional
-          
+      - name: books_fictional
+      - name: loans 
+      - name: members
+
+models: 
+  - name: customers_with_late_fees
+    tests: 
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('solution')
+    columns: 
+      - name: total_late_fees
+        tests: 
+          - not_negative 
+  - name: customer_withdrawals
+
+  - name: stg_books
+    columns:  
+      - name: book_id
+        tests: 
+          - unique 
+          - not_null
+
+  - name: stg_loans
+    columns: 
+      - name: loan_id
+        tests: 
+          - not_null
+      - name: book_id
+        tests: 
+          - not_null
+          - relationships: 
+              to: ref('stg_books')
+              field: member_id 
+      - name: member_id 
+        tests: 
+          - not_null
+          - relationships: 
+              to: ref('stg_members')
+              field: member_id
+  - name: stg_members 
+    columns: 
+      - name: member_id
+        tests: 
+          - not_null
+      - name: membership_tier
+        tests: 
+          - accepted_values: 
+              values: ['Bronze','Silver','Gold']
+      - name: member_name
+        tests: 
+          - no_digits:
+              column_name: member_name
+              config:
+                severity: warn 
+  
+seeds: 
+  - name: solution
+                
